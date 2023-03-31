@@ -5,10 +5,9 @@ import java.util.Random;
 
 public class TriviaGame {
 
-	private final static int NUMBER_OF_QUESTIONS = 50;
-
 	public static void main(String[] args) {
-		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(NUMBER_OF_QUESTIONS);
+		QuestionCatalog questionCatalog = new IndexedQuestionCatalog();
+		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(questionCatalog);
 
 		triviaGameEngine.addPlayer("Chet");
 		triviaGameEngine.addPlayer("Pat");

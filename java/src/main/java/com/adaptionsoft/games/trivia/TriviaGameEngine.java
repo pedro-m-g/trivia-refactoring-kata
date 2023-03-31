@@ -1,33 +1,21 @@
 package com.adaptionsoft.games.trivia;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class TriviaGameEngine {
+
+	private final QuestionCatalog questionCatalog;
+
 	ArrayList<String> players = new ArrayList<>();
 	int[] places = new int[6];
 	int[] purses = new int[6];
 	boolean[] inPenaltyBox = new boolean[6];
 
-	LinkedList<String> popQuestions = new LinkedList<>();
-	LinkedList<String> scienceQuestions = new LinkedList<>();
-	LinkedList<String> sportsQuestions = new LinkedList<>();
-	LinkedList<String> rockQuestions = new LinkedList<>();
-
 	int currentPlayer = 0;
 	boolean isGettingOutOfPenaltyBox;
 
-	public TriviaGameEngine(int numberOfQuestions) {
-		initQuestions(numberOfQuestions);
-	}
-
-	private void initQuestions(int numberOfQuestions) {
-		for (int questionNumber = 0; questionNumber < numberOfQuestions; questionNumber++) {
-			popQuestions.add("Pop Question " + questionNumber);
-			scienceQuestions.add("Science Question " + questionNumber);
-			sportsQuestions.add("Sports Question " + questionNumber);
-			rockQuestions.add("Rock Question " + questionNumber);
-		}
+	public TriviaGameEngine(QuestionCatalog questionCatalog) {
+		this.questionCatalog = questionCatalog;
 	}
 
 	public boolean addPlayer(String playerName) {
@@ -82,14 +70,8 @@ public class TriviaGameEngine {
 	}
 
 	private void askQuestion() {
-		if (currentCategory() == "Pop")
-			System.out.println(popQuestions.removeFirst());
-		if (currentCategory() == "Science")
-			System.out.println(scienceQuestions.removeFirst());
-		if (currentCategory() == "Sports")
-			System.out.println(sportsQuestions.removeFirst());
-		if (currentCategory() == "Rock")
-			System.out.println(rockQuestions.removeFirst());
+		Question question = questionCatalog.getNextQuestion();
+		System.out.println(question);
 	}
 
 	private String currentCategory() {
