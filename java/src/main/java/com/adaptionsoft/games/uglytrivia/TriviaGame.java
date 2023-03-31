@@ -24,14 +24,10 @@ public class TriviaGame {
 	private void initQuestions(int numberOfQuestions) {
 		for (int questionNumber = 0; questionNumber < numberOfQuestions; questionNumber++) {
 			popQuestions.add("Pop Question " + questionNumber);
-			scienceQuestions.add(("Science Question " + questionNumber));
-			sportsQuestions.add(("Sports Question " + questionNumber));
-			rockQuestions.add(createRockQuestion(questionNumber));
+			scienceQuestions.add("Science Question " + questionNumber);
+			sportsQuestions.add("Sports Question " + questionNumber);
+			rockQuestions.add("Rock Question " + questionNumber);
 		}
-	}
-
-	public String createRockQuestion(int index) {
-		return "Rock Question " + index;
 	}
 
 	public boolean isPlayable() {
