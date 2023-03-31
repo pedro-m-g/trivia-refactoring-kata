@@ -12,9 +12,9 @@ public class GameRunner {
 	public static void main(String[] args) {
 		TriviaGame triviaGame = new TriviaGame();
 
-		triviaGame.add("Chet");
-		triviaGame.add("Pat");
-		triviaGame.add("Sue");
+		triviaGame.addPlayer("Chet");
+		triviaGame.addPlayer("Pat");
+		triviaGame.addPlayer("Sue");
 
 		Random rand = new Random();
 
