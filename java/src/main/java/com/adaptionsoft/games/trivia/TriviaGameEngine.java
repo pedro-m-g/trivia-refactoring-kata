@@ -30,10 +30,6 @@ public class TriviaGameEngine {
 		}
 	}
 
-	public boolean isPlayable() {
-		return (howManyPlayers() >= 2);
-	}
-
 	public boolean addPlayer(String playerName) {
 		players.add(playerName);
 		places[howManyPlayers()] = 0;
