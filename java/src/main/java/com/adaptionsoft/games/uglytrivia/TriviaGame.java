@@ -17,12 +17,16 @@ public class TriviaGame {
 	int currentPlayer = 0;
 	boolean isGettingOutOfPenaltyBox;
 
-	public TriviaGame() {
-		for (int i = 0; i < 50; i++) {
-			popQuestions.addLast("Pop Question " + i);
-			scienceQuestions.addLast(("Science Question " + i));
-			sportsQuestions.addLast(("Sports Question " + i));
-			rockQuestions.addLast(createRockQuestion(i));
+	public TriviaGame(int numberOfQuestions) {
+		initQuestions(numberOfQuestions);
+	}
+
+	private void initQuestions(int numberOfQuestions) {
+		for (int questionNumber = 0; questionNumber < numberOfQuestions; questionNumber++) {
+			popQuestions.addLast("Pop Question " + questionNumber);
+			scienceQuestions.addLast(("Science Question " + questionNumber));
+			sportsQuestions.addLast(("Sports Question " + questionNumber));
+			rockQuestions.addLast(createRockQuestion(questionNumber));
 		}
 	}
 
