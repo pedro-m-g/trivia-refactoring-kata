@@ -1,9 +1,9 @@
-package com.adaptionsoft.games.uglytrivia;
+package com.adaptionsoft.games.trivia;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class TriviaGame {
+public class TriviaGameEngine {
 	ArrayList<String> players = new ArrayList<>();
 	int[] places = new int[6];
 	int[] purses = new int[6];
@@ -17,7 +17,7 @@ public class TriviaGame {
 	int currentPlayer = 0;
 	boolean isGettingOutOfPenaltyBox;
 
-	public TriviaGame(int numberOfQuestions) {
+	public TriviaGameEngine(int numberOfQuestions) {
 		initQuestions(numberOfQuestions);
 	}
 
