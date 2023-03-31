@@ -19,16 +19,12 @@ public class GameRunner {
 		Random rand = new Random();
 
 		do {
-
-			triviaGame.roll(rand.nextInt(5) + 1);
-
+			triviaGame.runTurn(rand.nextInt(5) + 1);
 			if (rand.nextInt(9) == 7) {
 				notAWinner = triviaGame.wrongAnswer();
 			} else {
 				notAWinner = triviaGame.wasCorrectlyAnswered();
 			}
-
 		} while (notAWinner);
-
 	}
 }

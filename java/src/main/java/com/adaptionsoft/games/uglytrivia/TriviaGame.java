@@ -49,7 +49,7 @@ public class TriviaGame {
 		return players.size();
 	}
 
-	public void roll(int roll) {
+	public void runTurn(int roll) {
 		System.out.println(players.get(currentPlayer) + " is the current player");
 		System.out.println("They have rolled a " + roll);
 
