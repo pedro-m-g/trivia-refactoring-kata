@@ -23,10 +23,10 @@ public class TriviaGame {
 
 	private void initQuestions(int numberOfQuestions) {
 		for (int questionNumber = 0; questionNumber < numberOfQuestions; questionNumber++) {
-			popQuestions.addLast("Pop Question " + questionNumber);
-			scienceQuestions.addLast(("Science Question " + questionNumber));
-			sportsQuestions.addLast(("Sports Question " + questionNumber));
-			rockQuestions.addLast(createRockQuestion(questionNumber));
+			popQuestions.add("Pop Question " + questionNumber);
+			scienceQuestions.add(("Science Question " + questionNumber));
+			sportsQuestions.add(("Sports Question " + questionNumber));
+			rockQuestions.add(createRockQuestion(questionNumber));
 		}
 	}
 
