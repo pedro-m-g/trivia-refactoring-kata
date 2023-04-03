@@ -4,6 +4,8 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
+import com.adaptionsoft.games.trivia.question.QuestionCatalog;
+
 public class TriviaGameEngineTest {
 
   @Test

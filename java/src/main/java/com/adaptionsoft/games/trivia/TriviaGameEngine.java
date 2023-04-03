@@ -2,6 +2,9 @@ package com.adaptionsoft.games.trivia;
 
 import java.util.ArrayList;
 
+import com.adaptionsoft.games.trivia.question.Question;
+import com.adaptionsoft.games.trivia.question.QuestionCatalog;
+
 public class TriviaGameEngine {
 
 	private final QuestionCatalog questionCatalog;
