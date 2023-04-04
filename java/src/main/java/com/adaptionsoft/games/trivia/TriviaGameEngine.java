@@ -1,71 +1,67 @@
 package com.adaptionsoft.games.trivia;
 
-import java.util.ArrayList;
-
+import com.adaptionsoft.games.trivia.player.Player;
+import com.adaptionsoft.games.trivia.player.PlayersManager;
 import com.adaptionsoft.games.trivia.question.Question;
 import com.adaptionsoft.games.trivia.question.QuestionCatalog;
 
 public class TriviaGameEngine {
 
 	private final QuestionCatalog questionCatalog;
+	private final PlayersManager playersManager;
 
-	ArrayList<String> players = new ArrayList<>();
 	int[] places = new int[6];
 	int[] purses = new int[6];
 	boolean[] inPenaltyBox = new boolean[6];
 
-	int currentPlayer = 0;
+	int currentPlayerTurn = 0;
 	boolean isGettingOutOfPenaltyBox;
 
-	public TriviaGameEngine(QuestionCatalog questionCatalog) {
+	public TriviaGameEngine(QuestionCatalog questionCatalog, PlayersManager playersManager) {
 		this.questionCatalog = questionCatalog;
+		this.playersManager = playersManager;
 	}
 
 	public boolean addPlayer(String playerName) {
-		players.add(playerName);
-		places[howManyPlayers()] = 0;
-		purses[howManyPlayers()] = 0;
-		inPenaltyBox[howManyPlayers()] = false;
+		playersManager.addPlayer(playerName);
+
+		int nextIndex = playersManager.getPlayersCount();
+		places[nextIndex] = 0;
+		purses[nextIndex] = 0;
+		inPenaltyBox[nextIndex] = false;
 
 		System.out.println(playerName + " was added");
-		System.out.println("They are player number " + players.size());
+		System.out.println("They are player number " + playersManager.getPlayersCount());
 		return true;
 	}
 
-	public int howManyPlayers() {
-		return players.size();
-	}
-
 	public void runTurn(int roll) {
-		System.out.println(players.get(currentPlayer) + " is the current player");
+		Player currentPlayer = playersManager.getCurrentPlayer();
+		System.out.println(currentPlayer + " is the current player");
 		System.out.println("They have rolled a " + roll);
 
-		if (inPenaltyBox[currentPlayer]) {
+		if (inPenaltyBox[currentPlayerTurn]) {
 			if (roll % 2 != 0) {
 				isGettingOutOfPenaltyBox = true;
 
-				System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-				places[currentPlayer] = places[currentPlayer] + roll;
-				if (places[currentPlayer] > 11)
-					places[currentPlayer] = places[currentPlayer] - 12;
+				System.out.println(currentPlayer + " is getting out of the penalty box");
+				places[currentPlayerTurn] = places[currentPlayerTurn] + roll;
+				if (places[currentPlayerTurn] > 11)
+					places[currentPlayerTurn] = places[currentPlayerTurn] - 12;
 
-				System.out.println(players.get(currentPlayer)
-						+ "'s new location is "
-						+ places[currentPlayer]);
+				System.out.println(currentPlayer + "'s new location is " + places[currentPlayerTurn]);
 				System.out.println("The category is " + currentCategory());
 				askQuestion();
 			} else {
-				System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
+				System.out.println(currentPlayer + " is not getting out of the penalty box");
 				isGettingOutOfPenaltyBox = false;
 			}
 		} else {
-			places[currentPlayer] = places[currentPlayer] + roll;
-			if (places[currentPlayer] > 11)
-				places[currentPlayer] = places[currentPlayer] - 12;
+			places[currentPlayerTurn] = places[currentPlayerTurn] + roll;
+			if (places[currentPlayerTurn] > 11)
+				places[currentPlayerTurn] = places[currentPlayerTurn] - 12;
 
-			System.out.println(players.get(currentPlayer)
-					+ "'s new location is "
-					+ places[currentPlayer]);
+			System.out.println(currentPlayer + "'s new location is " + places[currentPlayerTurn]);
 			System.out.println("The category is " + currentCategory());
 			askQuestion();
 		}
@@ -78,62 +74,59 @@ public class TriviaGameEngine {
 	}
 
 	private String currentCategory() {
-		if (places[currentPlayer] == 0)
+		if (places[currentPlayerTurn] == 0)
 			return "Pop";
-		if (places[currentPlayer] == 4)
+		if (places[currentPlayerTurn] == 4)
 			return "Pop";
-		if (places[currentPlayer] == 8)
+		if (places[currentPlayerTurn] == 8)
 			return "Pop";
-		if (places[currentPlayer] == 1)
+		if (places[currentPlayerTurn] == 1)
 			return "Science";
-		if (places[currentPlayer] == 5)
+		if (places[currentPlayerTurn] == 5)
 			return "Science";
-		if (places[currentPlayer] == 9)
+		if (places[currentPlayerTurn] == 9)
 			return "Science";
-		if (places[currentPlayer] == 2)
+		if (places[currentPlayerTurn] == 2)
 			return "Sports";
-		if (places[currentPlayer] == 6)
+		if (places[currentPlayerTurn] == 6)
 			return "Sports";
-		if (places[currentPlayer] == 10)
+		if (places[currentPlayerTurn] == 10)
 			return "Sports";
 		return "Rock";
 	}
 
 	public boolean wasCorrectlyAnswered() {
-		if (inPenaltyBox[currentPlayer]) {
+		Player currentPlayer = playersManager.getCurrentPlayer();
+		int playersCount = playersManager.getPlayersCount();
+
+		if (inPenaltyBox[currentPlayerTurn]) {
 			if (isGettingOutOfPenaltyBox) {
 				System.out.println("Answer was correct!!!!");
-				purses[currentPlayer]++;
-				System.out.println(players.get(currentPlayer)
-						+ " now has "
-						+ purses[currentPlayer]
-						+ " Gold Coins.");
+				purses[currentPlayerTurn]++;
+				System.out.println(currentPlayer + " now has " + purses[currentPlayerTurn] + " Gold Coins.");
 
 				boolean winner = didPlayerWin();
-				currentPlayer++;
-				if (currentPlayer == players.size()) {
-					currentPlayer = 0;
+				currentPlayerTurn++;
+				if (currentPlayerTurn == playersCount) {
+					currentPlayerTurn = 0;
 				}
 				return winner;
 			} else {
-				currentPlayer++;
-				if (currentPlayer == players.size()) {
-					currentPlayer = 0;
+				currentPlayerTurn++;
+				if (currentPlayerTurn == playersCount) {
+					currentPlayerTurn = 0;
 				}
 				return true;
 			}
 		} else {
 			System.out.println("Answer was corrent!!!!");
-			purses[currentPlayer]++;
-			System.out.println(players.get(currentPlayer)
-					+ " now has "
-					+ purses[currentPlayer]
-					+ " Gold Coins.");
+			purses[currentPlayerTurn]++;
+			System.out.println(currentPlayer + " now has " + purses[currentPlayerTurn] + " Gold Coins.");
 
 			boolean winner = didPlayerWin();
-			currentPlayer++;
-			if (currentPlayer == players.size()) {
-				currentPlayer = 0;
+			currentPlayerTurn++;
+			if (currentPlayerTurn == playersCount) {
+				currentPlayerTurn = 0;
 			}
 			return winner;
 		}
@@ -141,16 +134,18 @@ public class TriviaGameEngine {
 
 	public boolean wrongAnswer() {
 		System.out.println("Question was incorrectly answered");
-		System.out.println(players.get(currentPlayer) + " was sent to the penalty box");
-		inPenaltyBox[currentPlayer] = true;
+		System.out.println(playersManager.getCurrentPlayer() + " was sent to the penalty box");
+		inPenaltyBox[currentPlayerTurn] = true;
 
-		currentPlayer++;
-		if (currentPlayer == players.size())
-			currentPlayer = 0;
+		currentPlayerTurn++;
+		if (currentPlayerTurn == playersManager.getPlayersCount()) {
+			currentPlayerTurn = 0;
+		}
+
 		return true;
 	}
 
 	private boolean didPlayerWin() {
-		return !(purses[currentPlayer] == 6);
+		return !(purses[currentPlayerTurn] == 6);
 	}
 }
