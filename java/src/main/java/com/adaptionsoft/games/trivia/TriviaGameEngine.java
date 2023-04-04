@@ -107,12 +107,14 @@ public class TriviaGameEngine {
 
 				boolean winner = didPlayerWin();
 				currentPlayerTurn++;
+				playersManager.moveToNextPlayer();
 				if (currentPlayerTurn == playersCount) {
 					currentPlayerTurn = 0;
 				}
 				return winner;
 			} else {
 				currentPlayerTurn++;
+				playersManager.moveToNextPlayer();
 				if (currentPlayerTurn == playersCount) {
 					currentPlayerTurn = 0;
 				}
@@ -125,6 +127,7 @@ public class TriviaGameEngine {
 
 			boolean winner = didPlayerWin();
 			currentPlayerTurn++;
+			playersManager.moveToNextPlayer();
 			if (currentPlayerTurn == playersCount) {
 				currentPlayerTurn = 0;
 			}
@@ -138,6 +141,7 @@ public class TriviaGameEngine {
 		inPenaltyBox[currentPlayerTurn] = true;
 
 		currentPlayerTurn++;
+		playersManager.moveToNextPlayer();
 		if (currentPlayerTurn == playersManager.getPlayersCount()) {
 			currentPlayerTurn = 0;
 		}
