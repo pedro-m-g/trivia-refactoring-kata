@@ -16,7 +16,7 @@ public class Player {
 
   @Override
   public boolean equals(Object otherObject) {
-    if (otherObject == null || (otherObject instanceof Player)) {
+    if (otherObject == null || !(otherObject instanceof Player)) {
       return false;
     }
     Player otherPlayer = (Player) otherObject;
