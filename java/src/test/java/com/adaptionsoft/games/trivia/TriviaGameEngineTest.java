@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.adaptionsoft.games.trivia.board.TriviaBoard;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
 import com.adaptionsoft.games.trivia.question.QuestionCatalog;
 
@@ -15,7 +16,9 @@ public class TriviaGameEngineTest {
   public void should_create_a_new_engine() {
     QuestionCatalog questionCatalog = mock(QuestionCatalog.class);
     PlayersManager playersManager = mock(PlayersManager.class);
-    TriviaGameEngine triviaGameEngine = new TriviaGameEngine(questionCatalog, playersManager);
+    TriviaBoard triviaBoard = mock(TriviaBoard.class);
+    TriviaGameEngine triviaGameEngine = new TriviaGameEngine(questionCatalog, playersManager, triviaBoard);
+
     assertNotNull(triviaGameEngine);
   }
 

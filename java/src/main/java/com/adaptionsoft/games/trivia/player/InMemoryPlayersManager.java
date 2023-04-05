@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class InMemoryPlayersManager implements PlayersManager {
@@ -20,16 +21,21 @@ public class InMemoryPlayersManager implements PlayersManager {
   }
 
   @Override
+  public int getPlayersCount() {
+    return players.size();
+  }
+
+  @Override
+  public Collection<Player> getPlayers() {
+    return players;
+  }
+
+  @Override
   public Player getCurrentPlayer() {
     if (players.size() <= currentPlayerTurn) {
       return null;
     }
     return players.get(currentPlayerTurn);
-  }
-
-  @Override
-  public int getPlayersCount() {
-    return players.size();
   }
 
   @Override
@@ -39,5 +45,7 @@ public class InMemoryPlayersManager implements PlayersManager {
       currentPlayerTurn = 0;
     }
   }
+
+
 
 }
