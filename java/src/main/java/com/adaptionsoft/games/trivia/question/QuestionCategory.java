@@ -1,5 +1,8 @@
 package com.adaptionsoft.games.trivia.question;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 public enum QuestionCategory {
   POP("Pop"),
   SCIENCE("Science"),
@@ -17,12 +20,8 @@ public enum QuestionCategory {
     return name;
   }
 
-  public static QuestionCategory pickRandom() {
-    QuestionCategory[] allCategories = QuestionCategory.values();
-    int randomIndex = Double
-      .valueOf(Math.floor(Math.random() * allCategories.length))
-      .intValue();
-    return allCategories[randomIndex];
+  public static List<QuestionCategory> getAllQuestionCategories() {
+    return Stream.of(values()).toList();
   }
 
 }

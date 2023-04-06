@@ -31,10 +31,13 @@ public class ClassicTriviaBoard implements TriviaBoard {
   }
 
   private List<QuestionCategory> initQuestionCategoryLocations(Collection<Player> players) {
+    List<QuestionCategory> allQuestionCategories = QuestionCategory.getAllQuestionCategories();
+    int questionCategoriesCount = allQuestionCategories.size();
     return IntStream
         .range(0, size)
         .boxed()
-        .map(index -> QuestionCategory.pickRandom())
+        .map(location -> location % questionCategoriesCount)
+        .map(index -> allQuestionCategories.get(index))
         .collect(Collectors.toList());
   }
 
@@ -51,8 +54,7 @@ public class ClassicTriviaBoard implements TriviaBoard {
   }
 
   @Override
-  public QuestionCategory getQuestionCategoryForPlayer(Player player) {
-    int location = getPlayerLocation(player);
+  public QuestionCategory getQuestionCategoryAt(int location) {
     return questionCategoryLocations.get(location);
   }
 

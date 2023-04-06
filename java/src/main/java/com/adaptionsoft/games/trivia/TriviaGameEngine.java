@@ -27,10 +27,10 @@ public class TriviaGameEngine {
 		this.triviaBoard = triviaBoard;
 
 		pursesList = playersManager
-			.getPlayers()
-			.stream()
-			.map(player -> 0)
-			.collect(Collectors.toList());
+				.getPlayers()
+				.stream()
+				.map(player -> 0)
+				.collect(Collectors.toList());
 	}
 
 	public boolean addPlayer(String playerName) {
@@ -57,7 +57,7 @@ public class TriviaGameEngine {
 				triviaBoard.movePlayer(currentPlayer, roll);
 				int newPlayerLocation = triviaBoard.getPlayerLocation(currentPlayer);
 				System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
-				QuestionCategory questionCategory = triviaBoard.getQuestionCategoryForPlayer(currentPlayer);
+				QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
 				System.out.println("The category is " + questionCategory);
 				askQuestion();
 			} else {
@@ -68,7 +68,7 @@ public class TriviaGameEngine {
 			triviaBoard.movePlayer(currentPlayer, roll);
 			int newPlayerLocation = triviaBoard.getPlayerLocation(currentPlayer);
 			System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
-			QuestionCategory questionCategory = triviaBoard.getQuestionCategoryForPlayer(currentPlayer);
+			QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
 			System.out.println("The category is " + questionCategory);
 			askQuestion();
 		}
