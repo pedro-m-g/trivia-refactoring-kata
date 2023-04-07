@@ -4,6 +4,8 @@ package com.adaptionsoft.games.trivia;
 import java.util.Collection;
 import java.util.Random;
 
+import com.adaptionsoft.games.dice.Dice;
+import com.adaptionsoft.games.dice.FairDice;
 import com.adaptionsoft.games.trivia.board.ClassicTriviaBoard;
 import com.adaptionsoft.games.trivia.board.MapScoreBoard;
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
@@ -20,6 +22,7 @@ public class TriviaGame {
 
 	private static final int BOARD_SIZE = 12;
 	private static final int WINNING_SCORE = 6;
+	private static final int NUMBER_OF_FACES = 6;
 
 	public static void main(String[] args) {
 		QuestionCatalog questionCatalog = new IndexedQuestionCatalog();
@@ -40,18 +43,21 @@ public class TriviaGame {
 
 		ScoreBoard scoreBoard = new MapScoreBoard(WINNING_SCORE, players);
 
+		Dice dice = new FairDice(NUMBER_OF_FACES);
+
 		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(
 			questionCatalog,
 			playersManager,
 			triviaBoard,
 			penaltyBox,
-			scoreBoard
+			scoreBoard,
+			dice
 		);
 
 		Random rand = new Random();
 		boolean notAWinner;
 		do {
-			triviaGameEngine.runTurn(rand.nextInt(5) + 1);
+			triviaGameEngine.runTurn();
 			if (rand.nextInt(9) == 7) {
 				notAWinner = triviaGameEngine.wrongAnswer();
 			} else {

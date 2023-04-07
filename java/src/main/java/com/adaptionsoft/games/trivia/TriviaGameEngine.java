@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.trivia;
 
+import com.adaptionsoft.games.dice.Dice;
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
 import com.adaptionsoft.games.trivia.board.ScoreBoard;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
@@ -16,6 +17,7 @@ public class TriviaGameEngine {
 	private final TriviaBoard triviaBoard;
 	private final PenaltyBox penaltyBox;
 	private final ScoreBoard scoreBoard;
+	private final Dice dice;
 
 	int currentPlayerTurn = 0;
 	boolean isGettingOutOfPenaltyBox;
@@ -25,17 +27,21 @@ public class TriviaGameEngine {
 		PlayersManager playersManager,
 		TriviaBoard triviaBoard,
 		PenaltyBox penaltyBox,
-		ScoreBoard scoreBoard
+		ScoreBoard scoreBoard,
+		Dice dice
 	) {
 		this.questionCatalog = questionCatalog;
 		this.playersManager = playersManager;
 		this.triviaBoard = triviaBoard;
 		this.penaltyBox = penaltyBox;
 		this.scoreBoard = scoreBoard;
+		this.dice = dice;
 	}
 
-	public void runTurn(int roll) {
+	public void runTurn() {
+		int roll = dice.roll();
 		Player currentPlayer = playersManager.getCurrentPlayer();
+		
 		System.out.println(currentPlayer + " is the current player");
 		System.out.println("They have rolled a " + roll);
 
@@ -62,7 +68,6 @@ public class TriviaGameEngine {
 			System.out.println("The category is " + questionCategory);
 			askQuestion();
 		}
-
 	}
 
 	private void askQuestion() {

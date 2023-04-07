@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.adaptionsoft.games.dice.Dice;
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
 import com.adaptionsoft.games.trivia.board.ScoreBoard;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
@@ -22,6 +23,7 @@ public class TriviaGameEngineTest {
     TriviaBoard triviaBoard = mock(TriviaBoard.class);
     PenaltyBox penaltyBox = mock(PenaltyBox.class);
     ScoreBoard scoreBoard = mock(ScoreBoard.class);
+    Dice dice = mock(Dice.class);
 
     // When
     TriviaGameEngine triviaGameEngine = new TriviaGameEngine(
@@ -29,7 +31,8 @@ public class TriviaGameEngineTest {
       playersManager,
       triviaBoard,
       penaltyBox,
-      scoreBoard
+      scoreBoard,
+      dice
     );
 
     // Then
