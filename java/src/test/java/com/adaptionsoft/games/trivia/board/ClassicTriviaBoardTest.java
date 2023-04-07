@@ -58,7 +58,7 @@ public class ClassicTriviaBoardTest {
   }
 
   public void should_get_question_category_in_location() {
-    // Whem
+    // When
     TriviaBoard triviaBoard = new ClassicTriviaBoard(10, List.of());
 
     // Then
