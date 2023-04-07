@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.adaptionsoft.games.trivia.board.PenaltyBox;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
 import com.adaptionsoft.games.trivia.player.Player;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
@@ -15,33 +16,27 @@ public class TriviaGameEngine {
 	private final QuestionCatalog questionCatalog;
 	private final PlayersManager playersManager;
 	private final TriviaBoard triviaBoard;
-	private List<Integer> pursesList;
-	boolean[] inPenaltyBox = new boolean[6];
+	private final List<Integer> pursesList;
+	private final PenaltyBox penaltyBox;
 
 	int currentPlayerTurn = 0;
 	boolean isGettingOutOfPenaltyBox;
 
-	public TriviaGameEngine(QuestionCatalog questionCatalog, PlayersManager playersManager, TriviaBoard triviaBoard) {
+	public TriviaGameEngine(
+		QuestionCatalog questionCatalog,
+		PlayersManager playersManager,
+		TriviaBoard triviaBoard,
+		PenaltyBox penaltyBox
+	) {
 		this.questionCatalog = questionCatalog;
 		this.playersManager = playersManager;
 		this.triviaBoard = triviaBoard;
-
-		pursesList = playersManager
+		this.penaltyBox = penaltyBox;
+		this.pursesList = playersManager
 				.getPlayers()
 				.stream()
 				.map(player -> 0)
 				.collect(Collectors.toList());
-	}
-
-	public boolean addPlayer(String playerName) {
-		playersManager.addPlayer(playerName);
-
-		int nextIndex = playersManager.getPlayersCount();
-		inPenaltyBox[nextIndex] = false;
-
-		System.out.println(playerName + " was added");
-		System.out.println("They are player number " + playersManager.getPlayersCount());
-		return true;
 	}
 
 	public void runTurn(int roll) {
@@ -49,7 +44,7 @@ public class TriviaGameEngine {
 		System.out.println(currentPlayer + " is the current player");
 		System.out.println("They have rolled a " + roll);
 
-		if (inPenaltyBox[currentPlayerTurn]) {
+		if (penaltyBox.hasPenalty(currentPlayer)) {
 			if (roll % 2 != 0) {
 				isGettingOutOfPenaltyBox = true;
 
@@ -84,12 +79,13 @@ public class TriviaGameEngine {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		int playersCount = playersManager.getPlayersCount();
 
-		if (inPenaltyBox[currentPlayerTurn]) {
+		if (penaltyBox.hasPenalty(currentPlayer)) {
 			if (isGettingOutOfPenaltyBox) {
 				System.out.println("Answer was correct!!!!");
 
 				int currentPurses = pursesList.get(currentPlayerTurn);
 				pursesList.set(currentPlayerTurn, currentPurses);
+				penaltyBox.remove(currentPlayer);
 
 				System.out.println(currentPlayer + " now has " + currentPurses + " Gold Coins.");
 
@@ -127,10 +123,12 @@ public class TriviaGameEngine {
 	}
 
 	public boolean wrongAnswer() {
-		System.out.println("Question was incorrectly answered");
-		System.out.println(playersManager.getCurrentPlayer() + " was sent to the penalty box");
-		inPenaltyBox[currentPlayerTurn] = true;
+		Player currentPlayer = playersManager.getCurrentPlayer();
 
+		System.out.println("Question was incorrectly answered");
+		System.out.println(currentPlayer + " was sent to the penalty box");
+
+		penaltyBox.add(currentPlayer);
 		currentPlayerTurn++;
 		playersManager.moveToNextPlayer();
 		if (currentPlayerTurn == playersManager.getPlayersCount()) {

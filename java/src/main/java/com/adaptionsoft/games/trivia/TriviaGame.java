@@ -4,6 +4,8 @@ package com.adaptionsoft.games.trivia;
 import java.util.Random;
 
 import com.adaptionsoft.games.trivia.board.ClassicTriviaBoard;
+import com.adaptionsoft.games.trivia.board.PenaltyBox;
+import com.adaptionsoft.games.trivia.board.SetPenaltyBox;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
 import com.adaptionsoft.games.trivia.player.InMemoryPlayersManager;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
@@ -22,9 +24,19 @@ public class TriviaGame {
 		playersManager.addPlayer("Pat");
 		playersManager.addPlayer("Sue");
 
-		TriviaBoard triviaBoard = new ClassicTriviaBoard(BOARD_SIZE, playersManager.getPlayers());
+		TriviaBoard triviaBoard = new ClassicTriviaBoard(
+			BOARD_SIZE,
+			playersManager.getPlayers()
+		);
 
-		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(questionCatalog, playersManager, triviaBoard);
+		PenaltyBox penaltyBox = new SetPenaltyBox();
+
+		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(
+			questionCatalog,
+			playersManager,
+			triviaBoard,
+			penaltyBox
+		);
 
 		Random rand = new Random();
 		boolean notAWinner;
