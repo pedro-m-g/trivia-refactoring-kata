@@ -33,16 +33,9 @@ public class TriviaGame {
 		playersManager.addPlayer("Sue");
 
 		Collection<Player> players = playersManager.getPlayers();
-
-		TriviaBoard triviaBoard = new ClassicTriviaBoard(
-			BOARD_SIZE,
-			players
-		);
-
+		TriviaBoard triviaBoard = new ClassicTriviaBoard(BOARD_SIZE, players);
 		PenaltyBox penaltyBox = new SetPenaltyBox();
-
 		ScoreBoard scoreBoard = new MapScoreBoard(WINNING_SCORE, players);
-
 		Dice dice = new FairDice(NUMBER_OF_FACES);
 
 		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(
@@ -55,14 +48,15 @@ public class TriviaGame {
 		);
 
 		Random rand = new Random();
-		boolean notAWinner;
-		do {
+		boolean playerHasWon = false;
+
+		while (!playerHasWon) {
 			triviaGameEngine.runTurn();
 			if (rand.nextInt(9) == 7) {
-				notAWinner = triviaGameEngine.wrongAnswer();
+				triviaGameEngine.wrongAnswer();
 			} else {
-				notAWinner = triviaGameEngine.wasCorrectlyAnswered();
+				playerHasWon = triviaGameEngine.wasCorrectlyAnswered();
 			}
-		} while (notAWinner);
+		}
 	}
 }

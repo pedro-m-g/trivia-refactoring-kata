@@ -19,8 +19,6 @@ public class TriviaGameEngine {
 	private final ScoreBoard scoreBoard;
 	private final Dice dice;
 
-	boolean isGettingOutOfPenaltyBox;
-
 	public TriviaGameEngine(
 		QuestionCatalog questionCatalog,
 		PlayersManager playersManager,
@@ -82,21 +80,19 @@ public class TriviaGameEngine {
 		scoreBoard.acquireGoldCoin(currentPlayer);
 		int score = scoreBoard.getScore(currentPlayer);
 		System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
-		boolean winner = didPlayerWin();
 		playersManager.moveToNextPlayer();
-		return winner;
+		return didPlayerWin();
 	}
 
-	public boolean wrongAnswer() {
+	public void wrongAnswer() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		System.out.println("Question was incorrectly answered");
 		System.out.println(currentPlayer + " was sent to the penalty box");
 		penaltyBox.add(currentPlayer);
 		playersManager.moveToNextPlayer();
-		return true;
 	}
 
 	private boolean didPlayerWin() {
-		return !scoreBoard.isWinner(playersManager.getCurrentPlayer());
+		return scoreBoard.isWinner(playersManager.getCurrentPlayer());
 	}
 }
