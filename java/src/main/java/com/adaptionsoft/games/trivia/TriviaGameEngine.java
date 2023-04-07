@@ -42,28 +42,29 @@ public class TriviaGameEngine {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		System.out.println(currentPlayer + " is the current player");
 		System.out.println("They have rolled a " + roll);
-		if (penaltyBox.hasPenalty(currentPlayer)) {
-			if (roll % 2 != 0) {
-				isGettingOutOfPenaltyBox = true;
-				System.out.println(currentPlayer + " is getting out of the penalty box");
-				triviaBoard.movePlayer(currentPlayer, roll);
-				int newPlayerLocation = triviaBoard.getPlayerLocation(currentPlayer);
-				System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
-				QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
-				System.out.println("The category is " + questionCategory);
-				askQuestion(questionCategory);
-			} else {
-				System.out.println(currentPlayer + " is not getting out of the penalty box");
-				isGettingOutOfPenaltyBox = false;
-			}
-		} else {
-			triviaBoard.movePlayer(currentPlayer, roll);
-			int newPlayerLocation = triviaBoard.getPlayerLocation(currentPlayer);
-			System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
-			QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
-			System.out.println("The category is " + questionCategory);
-			askQuestion(questionCategory);
+		checkForPenalty(roll, currentPlayer);
+		triviaBoard.movePlayer(currentPlayer, roll);
+		int newPlayerLocation = triviaBoard.getPlayerLocation(currentPlayer);
+		System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
+		QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
+		System.out.println("The category is " + questionCategory);
+		askQuestion(questionCategory);
+	}
+
+	private void checkForPenalty(int roll, Player currentPlayer) {
+		if (!penaltyBox.hasPenalty(currentPlayer)) {
+			return;
 		}
+		if (shouldGetOutOfPenaltyBox(roll)) {
+			System.out.println(currentPlayer + " is getting out of the penalty box");
+			penaltyBox.remove(currentPlayer);
+		} else {
+			System.out.println(currentPlayer + " is not getting out of the penalty box");
+		}
+	}
+
+	private boolean shouldGetOutOfPenaltyBox(int roll) {
+		return roll % 2 == 1;
 	}
 
 	private void askQuestion(QuestionCategory questionCategory) {
@@ -74,29 +75,16 @@ public class TriviaGameEngine {
 	public boolean wasCorrectlyAnswered() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		if (penaltyBox.hasPenalty(currentPlayer)) {
-			if (isGettingOutOfPenaltyBox) {
-				System.out.println("Answer was correct!!!!");
-				scoreBoard.acquireGoldCoin(currentPlayer);
-				penaltyBox.remove(currentPlayer);
-				int score = scoreBoard.getScore(currentPlayer);
-				System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
-				boolean winner = didPlayerWin();
-				playersManager.moveToNextPlayer();
-				return winner;
-			} else {
-				playersManager.moveToNextPlayer();
-				return true;
-			}
-		} else {
-			System.out.println("Answer was correct!!!!");
-			scoreBoard.acquireGoldCoin(currentPlayer);
-			int score = scoreBoard.getScore(currentPlayer);
-			System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
-
-			boolean winner = didPlayerWin();
 			playersManager.moveToNextPlayer();
-			return winner;
+			return true;
 		}
+		System.out.println("Answer was correct!!!!");
+		scoreBoard.acquireGoldCoin(currentPlayer);
+		int score = scoreBoard.getScore(currentPlayer);
+		System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
+		boolean winner = didPlayerWin();
+		playersManager.moveToNextPlayer();
+		return winner;
 	}
 
 	public boolean wrongAnswer() {
