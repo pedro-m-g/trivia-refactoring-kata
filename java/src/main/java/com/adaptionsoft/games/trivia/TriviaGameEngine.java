@@ -1,9 +1,7 @@
 package com.adaptionsoft.games.trivia;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
+import com.adaptionsoft.games.trivia.board.ScoreBoard;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
 import com.adaptionsoft.games.trivia.player.Player;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
@@ -16,8 +14,8 @@ public class TriviaGameEngine {
 	private final QuestionCatalog questionCatalog;
 	private final PlayersManager playersManager;
 	private final TriviaBoard triviaBoard;
-	private final List<Integer> pursesList;
 	private final PenaltyBox penaltyBox;
+	private final ScoreBoard scoreBoard;
 
 	int currentPlayerTurn = 0;
 	boolean isGettingOutOfPenaltyBox;
@@ -26,17 +24,14 @@ public class TriviaGameEngine {
 		QuestionCatalog questionCatalog,
 		PlayersManager playersManager,
 		TriviaBoard triviaBoard,
-		PenaltyBox penaltyBox
+		PenaltyBox penaltyBox,
+		ScoreBoard scoreBoard
 	) {
 		this.questionCatalog = questionCatalog;
 		this.playersManager = playersManager;
 		this.triviaBoard = triviaBoard;
 		this.penaltyBox = penaltyBox;
-		this.pursesList = playersManager
-				.getPlayers()
-				.stream()
-				.map(player -> 0)
-				.collect(Collectors.toList());
+		this.scoreBoard = scoreBoard;
 	}
 
 	public void runTurn(int roll) {
@@ -83,11 +78,11 @@ public class TriviaGameEngine {
 			if (isGettingOutOfPenaltyBox) {
 				System.out.println("Answer was correct!!!!");
 
-				int currentPurses = pursesList.get(currentPlayerTurn);
-				pursesList.set(currentPlayerTurn, currentPurses);
+				scoreBoard.acquireGoldCoin(currentPlayer);
 				penaltyBox.remove(currentPlayer);
 
-				System.out.println(currentPlayer + " now has " + currentPurses + " Gold Coins.");
+				int score = scoreBoard.getScore(currentPlayer);
+				System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
 
 				boolean winner = didPlayerWin();
 				currentPlayerTurn++;
@@ -106,11 +101,9 @@ public class TriviaGameEngine {
 			}
 		} else {
 			System.out.println("Answer was correct!!!!");
-
-			int newPurses = pursesList.get(currentPlayerTurn) + 1;
-			pursesList.set(currentPlayerTurn, newPurses);
-
-			System.out.println(currentPlayer + " now has " + newPurses + " Gold Coins.");
+			scoreBoard.acquireGoldCoin(currentPlayer);
+			int score = scoreBoard.getScore(currentPlayer);
+			System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
 
 			boolean winner = didPlayerWin();
 			currentPlayerTurn++;
@@ -139,6 +132,6 @@ public class TriviaGameEngine {
 	}
 
 	private boolean didPlayerWin() {
-		return !(pursesList.get(currentPlayerTurn) == 6);
+		return !scoreBoard.isWinner(playersManager.getCurrentPlayer());
 	}
 }
