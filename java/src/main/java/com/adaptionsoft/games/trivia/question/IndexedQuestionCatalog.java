@@ -5,8 +5,8 @@ public class IndexedQuestionCatalog implements QuestionCatalog {
   private int index = 0;
 
   @Override
-  public Question getNextQuestion() {
-    Question question = new Question("Pop question " + index);
+  public Question getNextQuestion(QuestionCategory questionCategory) {
+    Question question = new Question(questionCategory + " question " + index);
     index++;
     return question;
   }

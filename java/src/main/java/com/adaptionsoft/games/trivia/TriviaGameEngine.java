@@ -19,7 +19,6 @@ public class TriviaGameEngine {
 	private final ScoreBoard scoreBoard;
 	private final Dice dice;
 
-	int currentPlayerTurn = 0;
 	boolean isGettingOutOfPenaltyBox;
 
 	public TriviaGameEngine(
@@ -41,21 +40,18 @@ public class TriviaGameEngine {
 	public void runTurn() {
 		int roll = dice.roll();
 		Player currentPlayer = playersManager.getCurrentPlayer();
-		
 		System.out.println(currentPlayer + " is the current player");
 		System.out.println("They have rolled a " + roll);
-
 		if (penaltyBox.hasPenalty(currentPlayer)) {
 			if (roll % 2 != 0) {
 				isGettingOutOfPenaltyBox = true;
-
 				System.out.println(currentPlayer + " is getting out of the penalty box");
 				triviaBoard.movePlayer(currentPlayer, roll);
 				int newPlayerLocation = triviaBoard.getPlayerLocation(currentPlayer);
 				System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
 				QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
 				System.out.println("The category is " + questionCategory);
-				askQuestion();
+				askQuestion(questionCategory);
 			} else {
 				System.out.println(currentPlayer + " is not getting out of the penalty box");
 				isGettingOutOfPenaltyBox = false;
@@ -66,42 +62,29 @@ public class TriviaGameEngine {
 			System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
 			QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
 			System.out.println("The category is " + questionCategory);
-			askQuestion();
+			askQuestion(questionCategory);
 		}
 	}
 
-	private void askQuestion() {
-		Question question = questionCatalog.getNextQuestion();
+	private void askQuestion(QuestionCategory questionCategory) {
+		Question question = questionCatalog.getNextQuestion(questionCategory);
 		System.out.println(question);
 	}
 
 	public boolean wasCorrectlyAnswered() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
-		int playersCount = playersManager.getPlayersCount();
-
 		if (penaltyBox.hasPenalty(currentPlayer)) {
 			if (isGettingOutOfPenaltyBox) {
 				System.out.println("Answer was correct!!!!");
-
 				scoreBoard.acquireGoldCoin(currentPlayer);
 				penaltyBox.remove(currentPlayer);
-
 				int score = scoreBoard.getScore(currentPlayer);
 				System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
-
 				boolean winner = didPlayerWin();
-				currentPlayerTurn++;
 				playersManager.moveToNextPlayer();
-				if (currentPlayerTurn == playersCount) {
-					currentPlayerTurn = 0;
-				}
 				return winner;
 			} else {
-				currentPlayerTurn++;
 				playersManager.moveToNextPlayer();
-				if (currentPlayerTurn == playersCount) {
-					currentPlayerTurn = 0;
-				}
 				return true;
 			}
 		} else {
@@ -111,28 +94,17 @@ public class TriviaGameEngine {
 			System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
 
 			boolean winner = didPlayerWin();
-			currentPlayerTurn++;
 			playersManager.moveToNextPlayer();
-			if (currentPlayerTurn == playersCount) {
-				currentPlayerTurn = 0;
-			}
 			return winner;
 		}
 	}
 
 	public boolean wrongAnswer() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
-
 		System.out.println("Question was incorrectly answered");
 		System.out.println(currentPlayer + " was sent to the penalty box");
-
 		penaltyBox.add(currentPlayer);
-		currentPlayerTurn++;
 		playersManager.moveToNextPlayer();
-		if (currentPlayerTurn == playersManager.getPlayersCount()) {
-			currentPlayerTurn = 0;
-		}
-
 		return true;
 	}
 
