@@ -70,18 +70,17 @@ public class TriviaGameEngine {
 		System.out.println(question);
 	}
 
-	public boolean onCorrectAnswer() {
+	public void onCorrectAnswer() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		if (penaltyBox.hasPenalty(currentPlayer)) {
 			playersManager.moveToNextPlayer();
-			return true;
+			return;
 		}
 		System.out.println("Answer was correct!!!!");
 		scoreBoard.acquireGoldCoin(currentPlayer);
 		int score = scoreBoard.getScore(currentPlayer);
 		System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
 		playersManager.moveToNextPlayer();
-		return didPlayerWin();
 	}
 
 	public void onWrongAnswer() {
@@ -92,7 +91,7 @@ public class TriviaGameEngine {
 		playersManager.moveToNextPlayer();
 	}
 
-	private boolean didPlayerWin() {
+	public boolean playerHasWon() {
 		return scoreBoard.isWinner(playersManager.getCurrentPlayer());
 	}
 }

@@ -39,23 +39,23 @@ public class TriviaGame {
 		Dice dice = new FairDice(NUMBER_OF_FACES);
 
 		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(
-				questionCatalog,
-				playersManager,
-				triviaBoard,
-				penaltyBox,
-				scoreBoard,
-				dice);
+			questionCatalog,
+			playersManager,
+			triviaBoard,
+			penaltyBox,
+			scoreBoard,
+			dice
+		);
 
 		Random rand = new Random();
-		boolean playerHasWon = false;
 
-		while (!playerHasWon) {
+		do {
 			triviaGameEngine.runTurn();
 			if (rand.nextInt(9) == 7) {
 				triviaGameEngine.onWrongAnswer();
 			} else {
-				playerHasWon = triviaGameEngine.onCorrectAnswer();
+				triviaGameEngine.onCorrectAnswer();
 			}
-		}
+		} while (triviaGameEngine.playerHasWon());
 	}
 }
