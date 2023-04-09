@@ -70,7 +70,7 @@ public class TriviaGameEngine {
 		System.out.println(question);
 	}
 
-	public boolean wasCorrectlyAnswered() {
+	public boolean onCorrectAnswer() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		if (penaltyBox.hasPenalty(currentPlayer)) {
 			playersManager.moveToNextPlayer();
@@ -84,7 +84,7 @@ public class TriviaGameEngine {
 		return didPlayerWin();
 	}
 
-	public void wrongAnswer() {
+	public void onWrongAnswer() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		System.out.println("Question was incorrectly answered");
 		System.out.println(currentPlayer + " was sent to the penalty box");

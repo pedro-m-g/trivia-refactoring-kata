@@ -39,13 +39,12 @@ public class TriviaGame {
 		Dice dice = new FairDice(NUMBER_OF_FACES);
 
 		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(
-			questionCatalog,
-			playersManager,
-			triviaBoard,
-			penaltyBox,
-			scoreBoard,
-			dice
-		);
+				questionCatalog,
+				playersManager,
+				triviaBoard,
+				penaltyBox,
+				scoreBoard,
+				dice);
 
 		Random rand = new Random();
 		boolean playerHasWon = false;
@@ -53,9 +52,9 @@ public class TriviaGame {
 		while (!playerHasWon) {
 			triviaGameEngine.runTurn();
 			if (rand.nextInt(9) == 7) {
-				triviaGameEngine.wrongAnswer();
+				triviaGameEngine.onWrongAnswer();
 			} else {
-				playerHasWon = triviaGameEngine.wasCorrectlyAnswered();
+				playerHasWon = triviaGameEngine.onCorrectAnswer();
 			}
 		}
 	}
