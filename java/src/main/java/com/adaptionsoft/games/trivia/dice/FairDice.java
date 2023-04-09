@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.dice;
+package com.adaptionsoft.games.trivia.dice;
 
 import java.util.Random;
 

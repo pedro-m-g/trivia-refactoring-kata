@@ -3,6 +3,10 @@ package com.adaptionsoft.games.dice;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
+
+import com.adaptionsoft.games.trivia.dice.Dice;
+import com.adaptionsoft.games.trivia.dice.FairDice;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FairDiceTest {

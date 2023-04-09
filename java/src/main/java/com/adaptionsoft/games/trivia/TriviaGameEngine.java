@@ -1,9 +1,9 @@
 package com.adaptionsoft.games.trivia;
 
-import com.adaptionsoft.games.dice.Dice;
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
 import com.adaptionsoft.games.trivia.board.ScoreBoard;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
+import com.adaptionsoft.games.trivia.dice.Dice;
 import com.adaptionsoft.games.trivia.player.Player;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
 import com.adaptionsoft.games.trivia.question.Question;

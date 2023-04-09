@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.adaptionsoft.games.dice.Dice;
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
 import com.adaptionsoft.games.trivia.board.ScoreBoard;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
+import com.adaptionsoft.games.trivia.dice.Dice;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
 import com.adaptionsoft.games.trivia.question.QuestionCatalog;
 

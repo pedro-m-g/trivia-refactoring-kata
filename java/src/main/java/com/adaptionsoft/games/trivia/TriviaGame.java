@@ -4,14 +4,14 @@ package com.adaptionsoft.games.trivia;
 import java.util.Collection;
 import java.util.Random;
 
-import com.adaptionsoft.games.dice.Dice;
-import com.adaptionsoft.games.dice.FairDice;
 import com.adaptionsoft.games.trivia.board.ClassicTriviaBoard;
 import com.adaptionsoft.games.trivia.board.MapScoreBoard;
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
 import com.adaptionsoft.games.trivia.board.ScoreBoard;
 import com.adaptionsoft.games.trivia.board.SetPenaltyBox;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
+import com.adaptionsoft.games.trivia.dice.Dice;
+import com.adaptionsoft.games.trivia.dice.FairDice;
 import com.adaptionsoft.games.trivia.player.InMemoryPlayersManager;
 import com.adaptionsoft.games.trivia.player.Player;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
