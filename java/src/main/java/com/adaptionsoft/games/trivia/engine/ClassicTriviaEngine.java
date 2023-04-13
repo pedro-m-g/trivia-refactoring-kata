@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia;
+package com.adaptionsoft.games.trivia.engine;
 
 import com.adaptionsoft.games.trivia.board.PenaltyBox;
 import com.adaptionsoft.games.trivia.board.ScoreBoard;
@@ -10,7 +10,7 @@ import com.adaptionsoft.games.trivia.question.Question;
 import com.adaptionsoft.games.trivia.question.QuestionCatalog;
 import com.adaptionsoft.games.trivia.question.QuestionCategory;
 
-public class TriviaGameEngine {
+public class ClassicTriviaEngine implements TriviaEngine {
 
 	private final QuestionCatalog questionCatalog;
 	private final PlayersManager playersManager;
@@ -19,7 +19,7 @@ public class TriviaGameEngine {
 	private final ScoreBoard scoreBoard;
 	private final Dice dice;
 
-	public TriviaGameEngine(
+	public ClassicTriviaEngine(
 		QuestionCatalog questionCatalog,
 		PlayersManager playersManager,
 		TriviaBoard triviaBoard,
@@ -35,7 +35,8 @@ public class TriviaGameEngine {
 		this.dice = dice;
 	}
 
-	public void runTurn() {
+	@Override
+	public void doTurn() {
 		int roll = dice.roll();
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		System.out.println(currentPlayer + " is the current player");
@@ -47,6 +48,34 @@ public class TriviaGameEngine {
 		QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
 		System.out.println("The category is " + questionCategory);
 		askQuestion(questionCategory);
+	}
+
+	@Override
+	public void onCorrectAnswer() {
+		Player currentPlayer = playersManager.getCurrentPlayer();
+		if (penaltyBox.hasPenalty(currentPlayer)) {
+			playersManager.moveToNextPlayer();
+			return;
+		}
+		System.out.println("Answer was correct!!!!");
+		scoreBoard.acquireGoldCoin(currentPlayer);
+		int score = scoreBoard.getScore(currentPlayer);
+		System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
+		playersManager.moveToNextPlayer();
+	}
+
+	@Override
+	public void onWrongAnswer() {
+		Player currentPlayer = playersManager.getCurrentPlayer();
+		System.out.println("Question was incorrectly answered");
+		System.out.println(currentPlayer + " was sent to the penalty box");
+		penaltyBox.add(currentPlayer);
+		playersManager.moveToNextPlayer();
+	}
+
+	@Override
+	public boolean currentPlayerWon() {
+		return scoreBoard.isWinner(playersManager.getCurrentPlayer());
 	}
 
 	private void checkForPenalty(int roll, Player currentPlayer) {
@@ -70,28 +99,4 @@ public class TriviaGameEngine {
 		System.out.println(question);
 	}
 
-	public void onCorrectAnswer() {
-		Player currentPlayer = playersManager.getCurrentPlayer();
-		if (penaltyBox.hasPenalty(currentPlayer)) {
-			playersManager.moveToNextPlayer();
-			return;
-		}
-		System.out.println("Answer was correct!!!!");
-		scoreBoard.acquireGoldCoin(currentPlayer);
-		int score = scoreBoard.getScore(currentPlayer);
-		System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
-		playersManager.moveToNextPlayer();
-	}
-
-	public void onWrongAnswer() {
-		Player currentPlayer = playersManager.getCurrentPlayer();
-		System.out.println("Question was incorrectly answered");
-		System.out.println(currentPlayer + " was sent to the penalty box");
-		penaltyBox.add(currentPlayer);
-		playersManager.moveToNextPlayer();
-	}
-
-	public boolean playerHasWon() {
-		return scoreBoard.isWinner(playersManager.getCurrentPlayer());
-	}
 }

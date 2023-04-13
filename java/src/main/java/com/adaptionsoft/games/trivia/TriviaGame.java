@@ -12,6 +12,8 @@ import com.adaptionsoft.games.trivia.board.SetPenaltyBox;
 import com.adaptionsoft.games.trivia.board.TriviaBoard;
 import com.adaptionsoft.games.trivia.dice.Dice;
 import com.adaptionsoft.games.trivia.dice.FairDice;
+import com.adaptionsoft.games.trivia.engine.ClassicTriviaEngine;
+import com.adaptionsoft.games.trivia.engine.TriviaEngine;
 import com.adaptionsoft.games.trivia.player.InMemoryPlayersManager;
 import com.adaptionsoft.games.trivia.player.Player;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
@@ -38,7 +40,7 @@ public class TriviaGame {
 		ScoreBoard scoreBoard = new MapScoreBoard(WINNING_SCORE, players);
 		Dice dice = new FairDice(NUMBER_OF_FACES);
 
-		TriviaGameEngine triviaGameEngine = new TriviaGameEngine(
+		TriviaEngine triviaEngine = new ClassicTriviaEngine(
 			questionCatalog,
 			playersManager,
 			triviaBoard,
@@ -50,12 +52,12 @@ public class TriviaGame {
 		Random rand = new Random();
 
 		do {
-			triviaGameEngine.runTurn();
+			triviaEngine.doTurn();
 			if (rand.nextInt(9) == 7) {
-				triviaGameEngine.onWrongAnswer();
+				triviaEngine.onWrongAnswer();
 			} else {
-				triviaGameEngine.onCorrectAnswer();
+				triviaEngine.onCorrectAnswer();
 			}
-		} while (triviaGameEngine.playerHasWon());
+		} while (triviaEngine.currentPlayerWon());
 	}
 }
