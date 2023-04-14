@@ -8,6 +8,10 @@ public class Question {
     this.text = text;
   }
 
+  public boolean isCorrect(String answer) {
+    return true;
+  }
+
   @Override
   public String toString() {
     return text;

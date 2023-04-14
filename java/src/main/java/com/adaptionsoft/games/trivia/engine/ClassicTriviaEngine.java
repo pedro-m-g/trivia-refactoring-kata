@@ -9,6 +9,7 @@ import com.adaptionsoft.games.trivia.player.PlayersManager;
 import com.adaptionsoft.games.trivia.question.Question;
 import com.adaptionsoft.games.trivia.question.QuestionCatalog;
 import com.adaptionsoft.games.trivia.question.QuestionCategory;
+import com.adaptionsoft.games.trivia.ui.TriviaUI;
 
 public class ClassicTriviaEngine implements TriviaEngine {
 
@@ -18,36 +19,47 @@ public class ClassicTriviaEngine implements TriviaEngine {
 	private final PenaltyBox penaltyBox;
 	private final ScoreBoard scoreBoard;
 	private final Dice dice;
+	private final TriviaUI triviaUI;
 
 	public ClassicTriviaEngine(
-		QuestionCatalog questionCatalog,
-		PlayersManager playersManager,
-		TriviaBoard triviaBoard,
-		PenaltyBox penaltyBox,
-		ScoreBoard scoreBoard,
-		Dice dice
-	) {
+			QuestionCatalog questionCatalog,
+			PlayersManager playersManager,
+			TriviaBoard triviaBoard,
+			PenaltyBox penaltyBox,
+			ScoreBoard scoreBoard,
+			Dice dice,
+			TriviaUI triviaUI) {
 		this.questionCatalog = questionCatalog;
 		this.playersManager = playersManager;
 		this.triviaBoard = triviaBoard;
 		this.penaltyBox = penaltyBox;
 		this.scoreBoard = scoreBoard;
 		this.dice = dice;
+		this.triviaUI = triviaUI;
 	}
 
 	@Override
 	public void doTurn() {
 		int roll = dice.roll();
 		Player currentPlayer = playersManager.getCurrentPlayer();
-		System.out.println(currentPlayer + " is the current player");
-		System.out.println("They have rolled a " + roll);
+		triviaUI.showCurrentPlayer(currentPlayer);
+		triviaUI.showDiceRoll(roll);
+
 		checkForPenalty(roll, currentPlayer);
+
 		triviaBoard.movePlayer(currentPlayer, roll);
 		int newPlayerLocation = triviaBoard.getPlayerLocation(currentPlayer);
-		System.out.println(currentPlayer + "'s new location is " + newPlayerLocation);
+		triviaUI.onPlayerMove(currentPlayer, roll, newPlayerLocation);
+
 		QuestionCategory questionCategory = triviaBoard.getQuestionCategoryAt(newPlayerLocation);
-		System.out.println("The category is " + questionCategory);
-		askQuestion(questionCategory);
+		Question question = questionCatalog.getNextQuestion(questionCategory);
+		String answer = triviaUI.promptQuestion(question);
+
+		if (question.isCorrect(answer)) {
+			onCorrectAnswer();
+		} else {
+			onWrongAnswer();
+		}
 	}
 
 	@Override
@@ -55,22 +67,30 @@ public class ClassicTriviaEngine implements TriviaEngine {
 		Player currentPlayer = playersManager.getCurrentPlayer();
 		if (penaltyBox.hasPenalty(currentPlayer)) {
 			playersManager.moveToNextPlayer();
+			triviaUI.onPenaltyBox(currentPlayer);
+			triviaUI.moveToPlayer(currentPlayer);
 			return;
 		}
-		System.out.println("Answer was correct!!!!");
+		triviaUI.onCorrectAnswer(currentPlayer);
+
 		scoreBoard.acquireGoldCoin(currentPlayer);
 		int score = scoreBoard.getScore(currentPlayer);
-		System.out.println(currentPlayer + " now has " + score + " Gold Coins.");
+		triviaUI.onScoreUpdate(score);
+
 		playersManager.moveToNextPlayer();
+		triviaUI.moveToPlayer(currentPlayer);
 	}
 
 	@Override
 	public void onWrongAnswer() {
 		Player currentPlayer = playersManager.getCurrentPlayer();
-		System.out.println("Question was incorrectly answered");
-		System.out.println(currentPlayer + " was sent to the penalty box");
+		triviaUI.onWrongAnswer(currentPlayer);
+
 		penaltyBox.add(currentPlayer);
+		triviaUI.onPenaltyBox(currentPlayer);
+
 		playersManager.moveToNextPlayer();
+		triviaUI.moveToPlayer(currentPlayer);
 	}
 
 	@Override
@@ -83,20 +103,15 @@ public class ClassicTriviaEngine implements TriviaEngine {
 			return;
 		}
 		if (shouldGetOutOfPenaltyBox(roll)) {
-			System.out.println(currentPlayer + " is getting out of the penalty box");
 			penaltyBox.remove(currentPlayer);
+			triviaUI.onOutOfPenaltyBox(currentPlayer);
 		} else {
-			System.out.println(currentPlayer + " is not getting out of the penalty box");
+			triviaUI.onPenaltyBox(currentPlayer);
 		}
 	}
 
 	private boolean shouldGetOutOfPenaltyBox(int roll) {
 		return roll % 2 == 1;
-	}
-
-	private void askQuestion(QuestionCategory questionCategory) {
-		Question question = questionCatalog.getNextQuestion(questionCategory);
-		System.out.println(question);
 	}
 
 }

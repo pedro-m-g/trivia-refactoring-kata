@@ -19,6 +19,7 @@ import com.adaptionsoft.games.trivia.player.Player;
 import com.adaptionsoft.games.trivia.player.PlayersManager;
 import com.adaptionsoft.games.trivia.question.IndexedQuestionCatalog;
 import com.adaptionsoft.games.trivia.question.QuestionCatalog;
+import com.adaptionsoft.games.trivia.ui.TriviaUI;
 
 public class TriviaGame {
 
@@ -39,6 +40,7 @@ public class TriviaGame {
 		PenaltyBox penaltyBox = new SetPenaltyBox();
 		ScoreBoard scoreBoard = new MapScoreBoard(WINNING_SCORE, players);
 		Dice dice = new FairDice(NUMBER_OF_FACES);
+		TriviaUI triviaUI = null;
 
 		TriviaEngine triviaEngine = new ClassicTriviaEngine(
 			questionCatalog,
@@ -46,7 +48,8 @@ public class TriviaGame {
 			triviaBoard,
 			penaltyBox,
 			scoreBoard,
-			dice
+			dice,
+			triviaUI
 		);
 
 		Random rand = new Random();
