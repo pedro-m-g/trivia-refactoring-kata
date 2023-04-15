@@ -1,16 +1,16 @@
-package com.adaptionsoft.games.dice;
+package com.adaptionsoft.games.trivia.dice;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 
-import com.adaptionsoft.games.trivia.dice.Dice;
-import com.adaptionsoft.games.trivia.dice.FairDice;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FairDiceTest {
 
+  @Test
   public void should_roll_dice() {
     // When
     Dice dice = new FairDice(6);
