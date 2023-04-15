@@ -21,8 +21,10 @@ public interface TriviaUI {
 
   void onWrongAnswer(Player currentPlayer);
 
-  void onScoreUpdate(int score);
+  void onScoreUpdate(Player player, int score);
 
   void onOutOfPenaltyBox(Player currentPlayer);
+
+  void onWinner(Player player);
 
 }
