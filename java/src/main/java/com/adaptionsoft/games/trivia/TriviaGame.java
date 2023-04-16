@@ -18,7 +18,7 @@ import com.adaptionsoft.games.trivia.player.PlayersManager;
 import com.adaptionsoft.games.trivia.question.IndexedQuestionCatalog;
 import com.adaptionsoft.games.trivia.question.QuestionCatalog;
 import com.adaptionsoft.games.trivia.ui.TriviaUI;
-import com.adaptionsoft.games.trivia.ui.simplecli.SimpleTriviaCLI;
+import com.adaptionsoft.games.trivia.ui.cli.TriviaCLI;
 
 public class TriviaGame {
 
@@ -39,7 +39,7 @@ public class TriviaGame {
 		PenaltyBox penaltyBox = new SetPenaltyBox();
 		ScoreBoard scoreBoard = new MapScoreBoard(WINNING_SCORE, players);
 		Dice dice = new FairDice(NUMBER_OF_FACES);
-		TriviaUI triviaUI = new SimpleTriviaCLI();
+		TriviaUI triviaUI = new TriviaCLI(System.in, System.out);
 
 		TriviaEngine triviaEngine = new TriviaEngine(
 			questionCatalog,

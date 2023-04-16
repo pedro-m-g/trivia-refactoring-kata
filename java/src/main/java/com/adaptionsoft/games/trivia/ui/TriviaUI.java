@@ -5,6 +5,8 @@ import com.adaptionsoft.games.trivia.question.Question;
 
 public interface TriviaUI {
 
+  default void init() { }
+
   void showCurrentPlayer(Player currentPlayer);
 
   void showDiceRoll(int roll);

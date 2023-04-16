@@ -39,6 +39,8 @@ public class TriviaEngine {
 	}
 
 	public void run() {
+		triviaUI.init();
+		
 		do {
 			doTurn();
 		} while (!currentPlayerWon());
